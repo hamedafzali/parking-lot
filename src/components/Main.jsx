@@ -1,8 +1,10 @@
 import React, { Component } from "react";
+
+import Parking from "./common/Parking";
 class Main extends Component {
   state = {};
   render() {
-    return <h1>Main</h1>;
+    return <Parking />;
   }
 }
 
