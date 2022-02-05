@@ -1,17 +1,23 @@
 import car from "../../assets/images/car.png";
-const Place = ({ type, no }) => {
+import QR from "./QR";
+const Place = ({ item, no }) => {
   return (
     <div
       className={`app-place ${
-        type === 0
+        item === 0
           ? "app-place-path"
-          : type === 1
+          : item === 1
           ? "app-place-empty"
           : "app-place-full"
       }`}
     >
-      {type !== 0 ? <strong>{`${no[0]}-${no[1]}`}</strong> : null}
-      {type === 2 ? <img src={car} style={{ width: "100%" }} /> : null}
+      {item !== 0 ? <strong>{no}</strong> : null}
+      {item && item !== 0 && item !== 1 ? (
+        <>
+          <img src={car} style={{ width: "100%" }} alt="" />
+          <QR value={item} />
+        </>
+      ) : null}
     </div>
   );
 };

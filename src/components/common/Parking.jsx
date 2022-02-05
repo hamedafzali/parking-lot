@@ -1,23 +1,14 @@
 import Place from "./Place";
+import { useSelector } from "react-redux";
 
-import { useEffect, useState } from "react";
-import getPlaces from "../../services/parking";
 const Parking = () => {
-  useEffect(() => {
-    handlegetPlaces();
-  }, []);
-  const [places, setPlaces] = useState([]);
-  const handlegetPlaces = () => {
-    const data = getPlaces();
-    setPlaces(data);
-  };
+  let parkPlaces = useSelector((state) => state.parkingReducer);
+
   return (
     <div className="parking-container">
-      {places.map((row, rowIndex) =>
-        row.map((col, colIndex) => (
-          <Place type={col} no={[rowIndex, colIndex]} />
-        ))
-      )}
+      {parkPlaces.map((item, index) => (
+        <Place item={item} no={index} />
+      ))}
     </div>
   );
 };
