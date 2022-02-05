@@ -14,19 +14,20 @@ const TicketMachine = () => {
   const [free, setFree] = useState([]);
   const [ticketNumber, setTicketNumber] = useState([]);
   const dispatch = useDispatch();
+  let parking = useSelector((state) => state.parkingReducer);
   useEffect(() => {
     setTotal(getALLPlaces(parking));
     setFree(getFreePlaces(parking));
   }, []);
 
-  let parking = useSelector((state) => state.parkingReducer);
   const handleClick = () => {
-    const randomElement = free[Math.floor(Math.random() * free.length)];
+    const f = getFreePlaces(parking);
+    const randomElement = f[Math.floor(Math.random() * f.length)];
     const ticketNumber = calcTicketNumber(randomElement);
     setTicketNumber(ticketNumber);
     dispatch(ticketIssued({ index: randomElement, value: ticketNumber }));
     //  dispatch(ticketIssued({ index: randomElement, value: ticketNumber })).then((result) => {
-    setFree(getFreePlaces(parking));
+    //setFree(getFreePlaces(parking));
   };
 
   return (
@@ -36,7 +37,7 @@ const TicketMachine = () => {
         <div className="summary">
           <div>Total Park Place: {total.length}</div>
           <hr />
-          <div>Free Park Place: {free.length}</div>
+          <div>Free Park Place: {getFreePlaces(parking).length}</div>
           <hr />
         </div>
         <Ticket timestamp={ticketNumber} ticketNumber={ticketNumber} />
