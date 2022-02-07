@@ -1,33 +1,30 @@
 import { useDispatch, useSelector } from "react-redux";
 import parkingImage from "../../assets/images/parking.jpg";
 import {
-  calcTicketNumber,
+  getTicket,
   getALLPlaces,
   getFreePlaces,
+  getSelectedPlaces,
+  calculatePrice,
 } from "../../utils/calc";
 import Ticket from "./Ticket";
-import { useState, useEffect, useCallback } from "react";
+
 import { ticketIssued, systemInitialed } from "../../store/parking";
-import getPlaces from "../../services/parking";
+import getData from "../../services/parking";
 const TicketMachine = () => {
-  const [total, setTotal] = useState([]);
-  const [free, setFree] = useState([]);
-  const [ticketNumber, setTicketNumber] = useState([]);
   const dispatch = useDispatch();
-  let parking = useSelector((state) => state.parkingReducer);
-  useEffect(() => {
-    setTotal(getALLPlaces(parking));
-    setFree(getFreePlaces(parking));
-  }, []);
+  const parkingMap = useSelector((state) => state.parkingReducer);
+  const freeplaces = getFreePlaces(parkingMap);
+  const totalplaces = getALLPlaces(parkingMap);
+  const selectedPlace = getSelectedPlaces(parkingMap);
 
   const handleClick = () => {
-    const f = getFreePlaces(parking);
-    const randomElement = f[Math.floor(Math.random() * f.length)];
-    const ticketNumber = calcTicketNumber(randomElement);
-    setTicketNumber(ticketNumber);
-    dispatch(ticketIssued({ index: randomElement, value: ticketNumber }));
-    //  dispatch(ticketIssued({ index: randomElement, value: ticketNumber })).then((result) => {
-    //setFree(getFreePlaces(parking));
+    const randomElement =
+      freeplaces[Math.floor(Math.random() * freeplaces.length)];
+    const ticketNumber = getTicket(randomElement.no);
+    dispatch(
+      ticketIssued({ no: randomElement.no, ticketNumber: ticketNumber })
+    );
   };
 
   return (
@@ -35,22 +32,44 @@ const TicketMachine = () => {
       <div className="ticket-machine-screen">
         <img src={parkingImage} alt="" />
         <div className="summary">
-          <div>Total Park Place: {total.length}</div>
+          <div>Total Park Place: {totalplaces.length}</div>
           <hr />
-          <div>Free Park Place: {getFreePlaces(parking).length}</div>
+          <div>Free Park Place: {freeplaces.length}</div>
           <hr />
         </div>
-        <Ticket timestamp={ticketNumber} ticketNumber={ticketNumber} />
+        <Ticket
+          ticketNumber={
+            selectedPlace && selectedPlace.ticketNumber
+              ? selectedPlace.ticketNumber
+              : ""
+          }
+          price={
+            selectedPlace &&
+            selectedPlace.ticketNumber &&
+            calculatePrice(selectedPlace.ticketNumber)
+          }
+        />
 
-        <div className="app-button" onClick={handleClick}>
-          Get Ticket
+        <div
+          className={`app-button ${
+            !freeplaces.length ? "button-disabled" : null
+          }`}
+          onClick={handleClick}
+        >
+          {!freeplaces.length ? "No ticket is available" : "Get ticket"}
+        </div>
+        <div
+          className={
+            !selectedPlace ? `app-button button-disabled` : "app-button"
+          }
+          onClick={handleClick}
+        >
+          Pay fee
         </div>
         <div
           className="app-button"
           onClick={() => {
-            dispatch(systemInitialed(getPlaces()));
-            setTotal(getALLPlaces(parking));
-            setFree(getFreePlaces(parking));
+            dispatch(systemInitialed(getData().parkingMap));
           }}
         >
           Reset

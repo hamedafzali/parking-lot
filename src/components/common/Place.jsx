@@ -1,21 +1,24 @@
 import car from "../../assets/images/car.png";
 import QR from "./QR";
-const Place = ({ item, no }) => {
+const Place = ({ item, onClick }) => {
   return (
     <div
       className={`app-place ${
-        item === 0
+        item.type === "path"
           ? "app-place-path"
-          : item === 1
-          ? "app-place-empty"
+          : !item.ticketNumber
+          ? "app-place- app-place-empty"
           : "app-place-full"
       }`}
+      onClick={() => {
+        item && item.ticketNumber && onClick(item);
+      }}
     >
-      {item !== 0 ? <strong>{no}</strong> : null}
-      {item && item !== 0 && item !== 1 ? (
+      {item.type === "Parking" ? <strong>{item.no}</strong> : null}
+      {item.ticketNumber ? (
         <>
           <img src={car} style={{ width: "100%" }} alt="" />
-          <QR value={item} />
+          <QR value={item.no} />
         </>
       ) : null}
     </div>
