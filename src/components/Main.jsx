@@ -9,15 +9,22 @@ const Main = () => {
   const { parkingMap } = getData();
   const dispatch = useDispatch();
   let parkPlaces = useSelector((state) => state.parkingReducer);
+
   useEffect(() => {
-    if (!parkPlaces.length) dispatch(systemInitialed(parkingMap));
-  }, [dispatch, parkPlaces.length, parkingMap]);
+    if (!parkPlaces.parkingMap && !parkPlaces.parkingMap.length)
+      dispatch(systemInitialed(parkingMap));
+  }, [dispatch, parkPlaces.parkingMap, parkingMap]);
 
   return (
-    <div className="app-container">
-      <Parking parkingMap={parkingMap} />
-      <TicketMachine />
-    </div>
+    <>
+      <div className="app-container">
+        <Parking />
+        <TicketMachine />
+      </div>
+      <button onClick={() => dispatch(systemInitialed(parkingMap))}>
+        reset
+      </button>
+    </>
   );
 };
 

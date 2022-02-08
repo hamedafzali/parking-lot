@@ -2,6 +2,7 @@
 export const SYSTEM_INITIALED = "systemInitialed";
 export const TICKET_ISSUED = "ticketIssued";
 export const TICKET_SELECTED = "ticketSelected";
+export const TICKET_SETTLED = "ticketSettled";
 
 //actions
 export const systemInitialed = (data) => ({
@@ -16,24 +17,41 @@ export const ticketSelected = (data) => ({
   type: TICKET_SELECTED,
   payload: data,
 });
-
+export const ticketSettled = (data) => ({
+  type: TICKET_SETTLED,
+  payload: data,
+});
 //reducers
-export default function parkingReducer(state = [], action) {
+export default function parkingReducer(
+  state = { parkingMap: [], ticket: [] },
+  action
+) {
   switch (action.type) {
     case SYSTEM_INITIALED:
-      return [...action.payload];
+      return { ticket: [], parkingMap: action.payload };
     case TICKET_ISSUED:
-      return state.map((i) =>
-        i.no === action.payload.no
-          ? { ...i, ticketNumber: action.payload.ticketNumber, selected: true }
-          : { ...i, selected: false }
-      );
+      return { ...state, ticket: [...state.ticket, action.payload] };
+
     case TICKET_SELECTED:
-      return state.map((i) =>
-        i.no === action.payload
-          ? { ...i, selected: true }
-          : { ...i, selected: false }
-      );
+      return {
+        ...state,
+        parkingMap: state.parkingMap.map((i) =>
+          i.no === action.payload
+            ? { ...i, selected: true }
+            : { ...i, selected: false }
+        ),
+      };
+    case TICKET_SETTLED:
+      return {
+        ...state,
+        ticket: [
+          state.map((i) =>
+            i.no === action.payload.no
+              ? { ...i, TICKET_SETTLED: action.payload.setteled }
+              : i
+          ),
+        ],
+      };
 
     default:
       return state;

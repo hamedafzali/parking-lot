@@ -12,6 +12,7 @@ const Ticket = ({ ticketNumber, price }) => {
     minute: "numeric",
     second: "numeric",
   };
+
   if (!ticketNumber.length) return <div className="ticket-container"></div>;
   return (
     <div className="ticket-container">
@@ -21,11 +22,13 @@ const Ticket = ({ ticketNumber, price }) => {
             <div>Parking Ticket</div>
             <div>{date.toLocaleDateString("de-DE", options)}</div>
 
-            <div>Parking Number:{ticketNumber}</div>
-            <strong>Price: €{price}</strong>
+            <div>Ticket Number: {ticketNumber}</div>
+            <div>Parking Number: {ticketNumber.substring(1, 3)}</div>
+
+            <div className="ticket-price">Price: €{price}</div>
           </div>
 
-          <QR value={ticketNumber} scale={12} />
+          <QR value={ticketNumber} scale={11} />
         </>
       )}
     </div>

@@ -32,9 +32,9 @@ export default function getData() {
     { type: "path", place: 28 },
     { type: "path", place: 29 },
     { type: "path", place: 30 },
+    { type: "enter", place: 33 },
     { type: "path", place: 31 },
     { type: "path", place: 32 },
-    { type: "path", place: 33 },
 
     { type: "Parking", no: 17, place: 34 },
     { type: "Parking", no: 18, place: 35 },
@@ -84,7 +84,7 @@ export default function getData() {
     { type: "path", place: 76 },
     { type: "path", place: 77 },
     { type: "path", place: 78 },
-    { type: "path", place: 79 },
+    { type: "exit", place: 79 },
 
     { type: "Parking", no: 39, place: 80 },
     { type: "Parking", no: 40, place: 81 },
