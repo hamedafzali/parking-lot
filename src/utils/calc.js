@@ -17,7 +17,8 @@ export function getALLPlaces(arr) {
 }
 export function getSelectedPlaces(arr) {
   //console.log(arr.filter((item) => item.selected === true))
-  return arr.filter((item) => item.selected === true)[0];
+  const selected = arr.filter((item) => item.selected === true)[0];
+  return !selected ? [] : selected;
 }
 export function getTicket(parkingNo) {
   const ticketNumber = `${parkingNo.toString().padStart(3, "0")}${Date.now()}`;
@@ -28,4 +29,11 @@ export function calculatePrice(barcode) {
   const baseAmount = 2;
   var diffHrs = Math.floor((diff % 86400000) / 3600000) + 1;
   return diffHrs * baseAmount;
+}
+export function getTicketStatus(item) {
+  const diff = Date.now() - item.setteledTimestamp;
+  var diffMins =
+    Math.floor((diff % 86400000) / 3600000) * 60 +
+    Math.floor(((diff % 86400000) % 3600000) / 60000);
+  return diffMins;
 }

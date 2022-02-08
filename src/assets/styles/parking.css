@@ -3,7 +3,7 @@
 }
 .parking-container {
   display: grid;
-  width: 49.6vw;
+  width: 51.2vw;
   grid-template-columns: repeat(16, 1fr);
 }
 
@@ -11,7 +11,7 @@
   text-align: center;
   position: relative;
   min-width: 3vw;
-  min-height: 6vw;
+  min-height: 8vw;
 }
 
 .app-place strong {
@@ -19,22 +19,25 @@
 }
 .app-place-empty {
   background-color: silver;
-  border-left: 0.1vw solid white;
+  border: 0.1vw solid white;
 }
 .app-place-full {
   background-color: yellow;
-  border-left: 0.1vw solid white;
+  border: 0.1vw solid white;
   cursor: pointer;
 }
 .app-place-full:hover {
   background-color: coral;
   transition: 0.3s;
 }
+.app-place-selected {
+  background-color: coral;
+}
 .app-place-path {
   background-color: gray;
 }
 .path-enter {
-  background-color: red;
+  background-color: darkblue;
   color: white;
   display: flex;
   justify-content: center;
@@ -45,7 +48,7 @@
   font-size: 2rem;
 }
 .path-exit {
-  background-color: red;
+  background-color: darkblue;
   color: white;
   display: flex;
   justify-content: center;
@@ -57,11 +60,11 @@
 }
 .ticket-machine {
   display: flex;
-  min-width: 48.8vw;
+  min-width: 43vw;
   text-align: center;
 }
 .ticket-machine-screen {
-  max-width: 60%;
+  min-width: 60%;
   /* border: 0.1vw solid black; */
   background-color: white;
   display: flex;
@@ -72,6 +75,11 @@
 }
 .ticket-machine-screen img {
   width: 100%;
+}
+.ticket-machine-ticketlist {
+  min-width: 38%;
+  max-height: 100vh;
+  overflow: scroll;
 }
 .app-button {
   border: 1px solid gray;

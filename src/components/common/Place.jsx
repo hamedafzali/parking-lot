@@ -9,11 +9,13 @@ const Place = ({ item, onClick, ticket }) => {
               item.type === "enter"
                 ? "path-enter"
                 : item.type === "exit"
-                ? "path-exit"
+                ? "path-exit "
                 : null
             }`
           : !ticket.length
           ? "app-place- app-place-empty"
+          : item.selected
+          ? "app-place-selected "
           : "app-place-full"
       }`}
       onClick={() => {

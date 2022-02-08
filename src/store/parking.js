@@ -44,13 +44,9 @@ export default function parkingReducer(
     case TICKET_SETTLED:
       return {
         ...state,
-        ticket: [
-          state.map((i) =>
-            i.no === action.payload.no
-              ? { ...i, TICKET_SETTLED: action.payload.setteled }
-              : i
-          ),
-        ],
+        ticket: state.ticket.map((i) =>
+          i.no === action.payload.no ? { ...i, ...action.payload } : i
+        ),
       };
 
     default:
