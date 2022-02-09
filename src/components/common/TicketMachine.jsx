@@ -1,4 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
 import parkingImage from "../../assets/images/parking.jpg";
 import {
   getTicket,
@@ -8,7 +9,6 @@ import {
   calculatePrice,
 } from "../../utils/calc";
 import Ticket from "./Ticket";
-
 import {
   ticketIssued,
   systemInitialed,
@@ -16,14 +16,16 @@ import {
   ticketSelected,
 } from "../../store/parking";
 import getData from "../../services/parking";
-import { useState } from "react";
+import PayButton from "./PayButton";
+import AppButton from "./AppButton";
+import Summary from "./Summary";
+import ReceiptList from "./ReceiptList";
 const TicketMachine = () => {
   const dispatch = useDispatch();
   const { parkingMap, ticket } = useSelector((state) => state.parkingReducer);
   const freeplaces = getFreePlaces(parkingMap, ticket);
   const totalplaces = getALLPlaces(parkingMap);
   const selectedPlace = getSelectedPlaces(parkingMap);
-  console.log("test", selectedPlace, selectedPlace.length, ticket.length);
   const [topay, setTopay] = useState(0);
   const handleClick = () => {
     const randomElement =
@@ -32,11 +34,9 @@ const TicketMachine = () => {
     dispatch(
       ticketIssued({ no: randomElement.no, ticketNumber: ticketNumber })
     );
-
     dispatch(ticketSelected(randomElement.no));
   };
   const handleTicketSettled = (type, price) => {
-    console.log(type, price);
     dispatch(
       ticketSettled({
         no: selectedPlace.no,
@@ -52,12 +52,11 @@ const TicketMachine = () => {
     <div className="ticket-machine">
       <div className="ticket-machine-screen">
         <img src={parkingImage} alt="" />
-        <div className="summary">
-          <div>Total Park Place: {totalplaces.length}</div>
-          <hr />
-          <div>Free Park Place: {freeplaces ? freeplaces.length : 0}</div>
-          <hr />
-        </div>
+
+        <Summary
+          totalplaces={totalplaces.length}
+          freeplaces={freeplaces ? freeplaces.length : 0}
+        />
         {selectedPlace && Object.keys(selectedPlace).length && ticket.length ? (
           <Ticket
             item={ticket.filter((i) => i.no === selectedPlace.no)[0]}
@@ -76,92 +75,59 @@ const TicketMachine = () => {
             : "Get ticket"}
         </div>
 
-        {selectedPlace && topay ? (
+        {Object.keys(selectedPlace).length && topay ? (
           <div className="payment-container">
-            <div
-              className="payment-item"
-              onClick={() =>
-                handleTicketSettled(
-                  "debit",
-                  calculatePrice(
-                    ticket.filter((i) => i.no === selectedPlace.no)[0]
-                      .ticketNumber
-                  )
+            <PayButton
+              text="Credit"
+              onClick={handleTicketSettled}
+              price={
+                selectedPlace &&
+                ticket.length &&
+                calculatePrice(
+                  ticket.filter((i) => i.no === selectedPlace.no)[0]
+                    .ticketNumber,
+                  ticket.filter((i) => i.no === selectedPlace.no)[0]
                 )
               }
-            >
-              <div>Credit</div>
-              <div>
-                €
-                {selectedPlace &&
-                  selectedPlace.ticketNumber &&
-                  calculatePrice(selectedPlace.ticketNumber)}
-              </div>
-            </div>
-            <div
-              className="payment-item"
-              onClick={() =>
-                handleTicketSettled(
-                  "debit",
-                  calculatePrice(
-                    ticket.filter((i) => i.no === selectedPlace.no)[0]
-                      .ticketNumber
-                  )
+            />
+            <PayButton
+              text="Debit"
+              onClick={handleTicketSettled}
+              price={
+                selectedPlace &&
+                ticket.length &&
+                calculatePrice(
+                  ticket.filter((i) => i.no === selectedPlace.no)[0]
+                    .ticketNumber,
+                  ticket.filter((i) => i.no === selectedPlace.no)[0]
                 )
               }
-            >
-              <div>Debit</div>
-              <div>
-                €
-                {selectedPlace &&
-                  selectedPlace.ticketNumber &&
-                  calculatePrice(selectedPlace.ticketNumber)}
-              </div>
-            </div>
-            <div
-              className="payment-item"
-              onClick={() =>
-                handleTicketSettled(
-                  "cash",
-                  calculatePrice(
-                    ticket.filter((i) => i.no === selectedPlace.no)[0]
-                      .ticketNumber
-                  )
+            />
+            <PayButton
+              text="Cash"
+              onClick={handleTicketSettled}
+              price={
+                selectedPlace &&
+                ticket.length &&
+                calculatePrice(
+                  ticket.filter((i) => i.no === selectedPlace.no)[0]
+                    .ticketNumber,
+                  ticket.filter((i) => i.no === selectedPlace.no)[0]
                 )
               }
-            >
-              <div>Cash</div>
-              <div>
-                €
-                {selectedPlace &&
-                  selectedPlace.ticketNumber &&
-                  calculatePrice(selectedPlace.ticketNumber)}
-              </div>
-            </div>
+            />
           </div>
         ) : (
-          <div
-            className={
-              !selectedPlace ? `app-button button-disabled` : "app-button"
-            }
-            onClick={() => setTopay(1)}
-          >
-            Pay fee
-          </div>
+          <AppButton text="Pay" onClick={() => setTopay(1)} />
         )}
-
-        <div
-          className="app-button"
+        <AppButton
+          text="Reset"
           onClick={() => {
             dispatch(systemInitialed(getData().parkingMap));
           }}
-        >
-          Reset
-        </div>
+        />
       </div>
-      <div className="ticket-machine-ticketlist">
-        {ticket.map((i) => (i.setteledTimestamp ? <Ticket item={i} /> : null))}
-      </div>
+      <ReceiptList ticket={ticket} />
     </div>
   );
 };

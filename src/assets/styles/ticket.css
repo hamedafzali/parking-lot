@@ -5,6 +5,11 @@
   min-height: 20%;
   display: flex;
   justify-content: space-between;
+  cursor: pointer;
+}
+.ticket-container:hover {
+  transition: 0.3s;
+  background-color: silver;
 }
 .ticket-right {
   margin-left: 1vw;
@@ -40,7 +45,7 @@
 }
 .payment-item {
   width: 100%;
-  padding: 1.5vw;
+  padding: 0.5vw;
   border: 1px solid gray;
   margin: 0.5vw;
   border-radius: 1vw;

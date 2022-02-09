@@ -14,6 +14,7 @@ const Parking = () => {
     <div className="parking-container">
       {parkingMap.map((item) => (
         <Place
+          key={item.place}
           item={item}
           onClick={clickHanler}
           ticket={ticket.filter(

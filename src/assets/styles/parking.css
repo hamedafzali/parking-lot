@@ -12,6 +12,11 @@
   position: relative;
   min-width: 3vw;
   min-height: 8vw;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: space-around;
+  align-items: center;
 }
 
 .app-place strong {
@@ -64,8 +69,6 @@
   text-align: center;
 }
 .ticket-machine-screen {
-  min-width: 60%;
-  /* border: 0.1vw solid black; */
   background-color: white;
   display: flex;
   flex-direction: column;
@@ -74,10 +77,10 @@
   border: 1px solid gray;
 }
 .ticket-machine-screen img {
-  width: 100%;
+  width: 80%;
 }
 .ticket-machine-ticketlist {
-  min-width: 38%;
+  min-width: 40%;
   max-height: 100vh;
   overflow: scroll;
 }

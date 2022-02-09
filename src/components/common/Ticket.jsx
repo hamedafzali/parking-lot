@@ -1,22 +1,9 @@
 import { calculatePrice, getTicketStatus } from "../../utils/calc";
 import QR from "./QR";
+import { formatDate } from "./../../utils/convert";
 
 const Ticket = ({ item, scale }) => {
-  const formatDate = (timestamp) => {
-    var date = new Date(parseInt(timestamp));
-    const options = {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-      second: "numeric",
-    };
-    return date.toLocaleDateString("de-DE", options);
-  };
-
-  if (!item) return <div className="ticket-container"></div>;
+  if (!item && item.length) return <div className="ticket-container"></div>;
   return (
     <div className="ticket-container">
       {item.ticketNumber && (
@@ -37,7 +24,7 @@ const Ticket = ({ item, scale }) => {
           >
             <div>
               {item && item.setteledTimestamp
-                ? "Parking Recipt"
+                ? "Parking Receipt"
                 : "Parking Ticket"}
             </div>
             <div>{formatDate(item.ticketNumber.substring(3, 16))}</div>
@@ -51,7 +38,7 @@ const Ticket = ({ item, scale }) => {
             <div className="ticket-price">
               {item.price
                 ? `Payed €${item.price} by ${item.type} `
-                : `Price €${calculatePrice(item.ticketNumber)}`}
+                : `Price €${calculatePrice(item.ticketNumber, item)}`}
             </div>
           </div>
           {scale && <QR value={item.ticketNumber} scale={scale} />}

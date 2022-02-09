@@ -1,5 +1,4 @@
 import car from "../../assets/images/car.png";
-import QR from "./QR";
 const Place = ({ item, onClick, ticket }) => {
   return (
     <div
@@ -26,7 +25,6 @@ const Place = ({ item, onClick, ticket }) => {
       {ticket.length ? (
         <>
           <img src={car} style={{ width: "100%" }} alt="" />
-          <QR value={!ticket.length && ticket.ticketNumber} />
         </>
       ) : null}
     </div>
